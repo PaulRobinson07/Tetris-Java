@@ -9,15 +9,15 @@ import java.awt.event.WindowEvent;
 public class main {
     // main function where everthing starts
     public static void main(String[] args) {
-		//dimensions of the frame
-		final short WIDTH = 960;
-		final short HEIGHT = 540;
-
         // Declaring a Frame and Label
         Frame frame = new Frame("Tetris");
 	
 		//adds the drawing function to the main file
 		graphics gr = new graphics();
+
+		//dimensions of the frame
+		final int WIDTH = gr.TILESIZE*10;
+		final int HEIGHT = gr.TILESIZE*20;
 
 		//adds the draw function to the frame
 		frame.add(gr);
