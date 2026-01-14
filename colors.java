@@ -1,5 +1,6 @@
 import java.awt.*;
 
+//class that stores all the colors used to render
 public class colors {
 	Color white= new Color(255, 255, 255);
 	Color faded_white = new Color(252, 238, 238);

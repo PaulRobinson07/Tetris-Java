@@ -6,6 +6,7 @@ import java.net.URL;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+//starting class that runs everything at the start and handles user input
 public class main {
     // main function where everthing starts
     public static void main(String[] args) {
