@@ -1,6 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 
+import java.awt.event.*;
+
 public class graphics extends JPanel implements Runnable {
 	//gets the game and color variables/methods
 	game_area game = new game_area();

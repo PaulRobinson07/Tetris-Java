@@ -18,7 +18,9 @@ public class main {
 
 		//starts the game loop that runs every frame	
 		gr.startGameThread();
-
+		
+		input inputs = new input();
+		frame.addKeyListener(inputs);
 		//dimensions of the frame
 		final int WIDTH = gr.TILESIZE*10;
 		final int HEIGHT = gr.TILESIZE*20;
@@ -27,11 +29,11 @@ public class main {
 		frame.add(gr);
 
 		//gets the icon image for the top left
-		ImageIcon icon = new ImageIcon("tetris.png");
+		ImageIcon icon = new ImageIcon("../images/tetris.png");
 
 		frame.setIconImage(icon.getImage());
 		//sets the dimensions of the window
-        frame.setSize(WIDTH, HEIGHT); 
+        frame.setSize(WIDTH+gr.TILESIZE, HEIGHT+gr.TILESIZE); 
 
 		//makes the window visible
         frame.setVisible(true);
@@ -44,13 +46,6 @@ public class main {
                 System.exit(0);
             }
         });
-		gr.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String input = gr.getText();
-				// Process the input
-			}
-		});
 
 	}
 }
