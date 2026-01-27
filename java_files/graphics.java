@@ -17,9 +17,6 @@ public class graphics extends JPanel implements Runnable {
 	//draw to screen function
 	public void paintComponent (Graphics g){
 		super.paintComponent(g);
-		//makes a tileset for later use
-		game.makeWorld();
-		game.world[x][y] = 4;
 		//iterates through every tile to draw it
 		for (int i=0; i<10;i++) {
 			for (int j=0; j<20; j++) {
@@ -60,6 +57,7 @@ public class graphics extends JPanel implements Runnable {
 	}
 	//inital code that starts the timer for game logic
 	public void startGameThread() {
+		game.makeWorld();
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
@@ -69,14 +67,8 @@ public class graphics extends JPanel implements Runnable {
 		while(true) {
 			//changes the position of the current tetrimino
 			if (y<19) {
-				y++;
+				move_shape(0,1);
 			}
-			/*if (main.inputs.keys[65]) { 
-				x--;
-			}
-			if (main.inputs.keys[68]) {
-				x++;
-			}*/
 			//redraws the screen for the next frame
 			repaint();
 			//tries to wait to make another frame
@@ -88,6 +80,31 @@ public class graphics extends JPanel implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+	public void move_shape(int dx, int dy) {
+		for (int i=0; i<4; i++) {
+			for (int j=0; j<4; j++) {
+				if (t.square[0][i][j]!=0) {
+					game.world[i+x][j+y] = 0;
+				}
+			}
+		}
+		for (int i=0; i<4; i++) {
+			for (int j=0; j<4; j++) {
+				if (t.square[0][i][j]!=0) {
+					int ax = i+x+dx;
+					int ay = j+y+dy;
+					if (!(ax<0 || ax>9 || ay<0 || ay>19)) {
+						game.world[i+x+dx][j+y+dy] = t.square[0][i][j];
+					}
+					else {
+						return;
+					}
+				}
+			}
+		}
+		y+=dy;
+		x+=dx;
 	}
 	//function used for drawing tiles onto the screen
 	public void tile (int x, int y, Graphics g, Color c1, Color c2) {
