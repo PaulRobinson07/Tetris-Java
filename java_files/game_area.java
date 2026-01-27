@@ -2,6 +2,7 @@
 public class game_area {
 	//defines the world
 	int[][] world = new int[10][20];
+
 	//inital method that defines the empty world area
 	public void makeWorld() {
 		//iterates over the entire gamespace to fill it
@@ -11,8 +12,8 @@ public class game_area {
 			}
 		}
 		//temp loop for filling with generic testing colors
-		for (int i=0;i<10;i++) {
-			world[i][1] = i;
-		}
+		// for (int i=0;i<10;i++) {
+		// 	world[i][1] = i;
+		// }
 	}
 }

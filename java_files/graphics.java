@@ -1,8 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
-
-import java.awt.event.*;
-
+import java.util.Arrays;
 public class graphics extends JPanel implements Runnable {
 	//gets the game and color variables/methods
 	game_area game = new game_area();
@@ -82,29 +80,46 @@ public class graphics extends JPanel implements Runnable {
 		}
 	}
 	public void move_shape(int dx, int dy) {
+		int[][] swap_world = new int[10][20];
+		for (int a = 0; a<10;a++) {
+			for (int b=0; b<20;b++) {
+				swap_world[a][b] = game.world[a][b];
+			}
+			System.out.println();
+		}
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
-				if (t.square[0][i][j]!=0) {
-					game.world[i+x][j+y] = 0;
+				if (t.square[0][j][i]!=0) {
+					swap_world[i+x][j+y] = 0;
 				}
 			}
 		}
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
-				if (t.square[0][i][j]!=0) {
+				if (t.square[0][j][i]!=0) {
 					int ax = i+x+dx;
 					int ay = j+y+dy;
-					if (!(ax<0 || ax>9 || ay<0 || ay>19)) {
-						game.world[i+x+dx][j+y+dy] = t.square[0][i][j];
-					}
-					else {
+					if (ax<0 || ax>9) {
+						System.out.println("Piece collied with border");
 						return;
 					}
+					if (ay<0 || ay>19) {
+						System.out.println("Piece collied with border");
+						y=0;
+						return;
+					}
+					if (swap_world[i+x+dx][j+y+dy]!=0) {
+						System.out.println("Piece collied with another piece");
+						y=0;
+						return;
+					}
+					swap_world[i+x+dx][j+y+dy] = t.square[0][j][i];
 				}
 			}
 		}
-		y+=dy;
 		x+=dx;
+		y+=dy;
+		game.world = Arrays.copyOf(swap_world,swap_world.length);
 	}
 	//function used for drawing tiles onto the screen
 	public void tile (int x, int y, Graphics g, Color c1, Color c2) {
