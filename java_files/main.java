@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 
 //starting class that runs everything at the start and handles user input
 public class main {
+	public static input inputs = new input();
     // main function where everthing starts
     public static void main(String[] args) {
         // Declaring a Frame and Label
@@ -19,8 +20,9 @@ public class main {
 		//starts the game loop that runs every frame	
 		gr.startGameThread();
 		
-		input inputs = new input();
+		//input inputs = new input();
 		frame.addKeyListener(inputs);
+
 		//dimensions of the frame
 		final int WIDTH = gr.TILESIZE*10;
 		final int HEIGHT = gr.TILESIZE*20;
@@ -46,6 +48,5 @@ public class main {
                 System.exit(0);
             }
         });
-
 	}
 }

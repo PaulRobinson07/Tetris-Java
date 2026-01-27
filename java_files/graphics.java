@@ -71,12 +71,18 @@ public class graphics extends JPanel implements Runnable {
 			if (y<19) {
 				y++;
 			}
+			if (main.inputs.keys[65]) { 
+				x--;
+			}
+			if (main.inputs.keys[68]) {
+				x++;
+			}
 			//redraws the screen for the next frame
 			repaint();
 			//tries to wait to make another frame
 			try {
 				//waits a specified amount of time
-				Thread.sleep(30);
+				Thread.sleep(300);
 			} catch(InterruptedException e) {
 				//prints out the error if the frame fails to run
 				e.printStackTrace();
