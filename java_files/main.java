@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 
 //starting class that runs everything at the start and handles user input
 public class main {
+	public static graphics gr = new graphics();
 	public static input inputs = new input();
     // main function where everthing starts
     public static void main(String[] args) {
@@ -15,7 +16,7 @@ public class main {
         Frame frame = new Frame("Tetris");
 	
 		//adds the drawing function to the main file
-		graphics gr = new graphics();
+		//graphics gr = new graphics();
 
 		//starts the game loop that runs every frame	
 		gr.startGameThread();
