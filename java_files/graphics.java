@@ -32,7 +32,7 @@ public class graphics extends JPanel implements Runnable {
 	public void paintComponent (Graphics g){
 		//overwries the JPanel to start drawing things through the class
 		super.paintComponent(g);
-
+		setBackground(game_colors.red);
 		//iterates through every tile to draw it
 		for (int i=0; i<10;i++) {
 			for (int j=0; j<20; j++) {
@@ -152,9 +152,15 @@ public class graphics extends JPanel implements Runnable {
 
 					//makes a new piece if the last one reached the bottom
 					if (ay<0 || ay>19) {
+						//resets positioning variables
 						y=0;
 						x=5;
 						r=0;
+
+						//removes full lines
+						check_lines();
+
+						//gets a new piece to place
 						current_piece = (int)(Math.random()*7)+1;
 
 						//doesn't move the piece and resets to the previous game area
@@ -165,9 +171,15 @@ public class graphics extends JPanel implements Runnable {
 					if (swap_world[i+x+dx][j+y+dy]!=0) {
 						//if the tile is moving down a new piece is made
 						if (dy!=0) {
+							//resets positioning variables
 							y=0;
 							x=5;
 							r=0;
+
+							//removes full lines
+							check_lines();
+
+							//gets a new piece to place
 							current_piece = (int)(Math.random()*7)+1;
 						}
 						//doesn't move the piece and resets to the previous game area
@@ -187,6 +199,39 @@ public class graphics extends JPanel implements Runnable {
 
 		//updates the world
 		game.world = Arrays.copyOf(swap_world,swap_world.length);
+	}
+	
+	//method for checking if lines need to be cleared
+	public void check_lines() {
+		//variable used to store the number of spaces filled on a given line
+		int line_spaces_filled = 0;
+
+		//loops over every tile skipping the first line because it should never be full
+		for (int i=1; i<20;i++) {
+			for (int j=0; j<10; j++) {
+				//checks if the tile is empty
+				if (game.world[j][i]==0) {
+					//skips to the next line
+					j=10;	
+				}
+				//adds one tile to the tile count
+				else {
+					line_spaces_filled++;
+				}
+			}
+
+			//if the previous loop got a full line, all lines above the current one are moved down
+			if (line_spaces_filled==10) {
+				for (int a=i;a>1;a--) {
+					for (int j=0; j<10; j++) {
+						game.world[j][a] = game.world[j][a-1];
+					}
+				}
+			}
+
+			//the space counter is reset
+			line_spaces_filled = 0;
+		}
 	}
 
 	//gets the value of a tetrimino at a certain point with rotation R

@@ -30,6 +30,7 @@ public class input implements KeyListener {
 			break;
 			case 32:
 				//move tetrimino to bottom 
+				main.gr.move_shape(0,1,0);
 			break;
 			case 8:
 				//ends the program
