@@ -14,17 +14,19 @@ public class input implements KeyListener {
 		switch(e.getKeyCode()) {
 			case 65:
 				//move tetrimino left
-				main.gr.move_shape(-1,0);
+				main.gr.move_shape(-1,0,0);
 			break;
 			case 68:
 				//move tetrimino right
-				main.gr.move_shape(1,0);
+				main.gr.move_shape(1,0,0);
 			break;
 			case 81:
 				//rotate the tetrimino counterclockwise
+				main.gr.move_shape(0,0,-1);
 			break;
 			case 69:
 				//rotate the tetrimino clockwise
+				main.gr.move_shape(0,0,1);
 			break;
 			case 32:
 				//move tetrimino to bottom 

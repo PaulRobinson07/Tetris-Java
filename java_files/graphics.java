@@ -20,6 +20,11 @@ public class graphics extends JPanel implements Runnable {
 	int x = 5;
 	int y = 0;
 
+	int current_piece = (int)(Math.random()*7)+1;
+	
+	//rotation angle (times 90 deg)
+	int r = 0;
+	
 	//sets the size of each of the tiles
 	final short TILESIZE = 32;
 
@@ -84,7 +89,7 @@ public class graphics extends JPanel implements Runnable {
 		//keeps running the thread
 		while(true) {
 			//moves the tetrimino down one tile
-			move_shape(0,1);
+			move_shape(0,1,0);
 
 			//redraws the screen for the current frame
 			repaint();
@@ -101,30 +106,40 @@ public class graphics extends JPanel implements Runnable {
 	}
 
 	//function that allows tetriminoes to move and does the proper collision checks for them
-	public void move_shape(int dx, int dy) {
+	public void move_shape(int dx, int dy, int rotation) {
+		//temporary variable for storing the next rotation matrix value
+		int next_rotate = r+rotation;	
+
+		//clamps it between the size of the array and loops back over if it goes outside of it
+		if (next_rotate>get_tetrimino_length()-1) {next_rotate=0;}
+		if (next_rotate<0) {next_rotate=get_tetrimino_length()-1;}
+
 		//temporary variable for checking movement collisions
 		int[][] swap_world = new int[10][20];
+
 		//copies the game world
 		for (int a = 0; a<10;a++) {
 			for (int b=0; b<20;b++) {
 				swap_world[a][b] = game.world[a][b];
 			}
 		}
+
 		//loops over the tetrimino's tiles to remove the current position's data
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if the tile is occupied in the tetrimino's data
-				if (t.square[0][j][i]!=0) {
+				if (get_tetrimino(r,j,i)!=0) {
 					//resets the data in the correpsonding tile
 					swap_world[i+x][j+y] = 0;
 				}
 			}
 		}
+
 		//loops over the tetrimino's tiles to check if the piece can move
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if a tetrimino should be drawn
-				if (t.square[0][j][i]!=0) {
+				if (get_tetrimino(next_rotate,j,i)!=0) {
 					//temporary variables storing position of the current tile to be checked
 					int ax = i+x+dx;
 					int ay = j+y+dy;
@@ -138,6 +153,10 @@ public class graphics extends JPanel implements Runnable {
 					//makes a new piece if the last one reached the bottom
 					if (ay<0 || ay>19) {
 						y=0;
+						x=5;
+						r=0;
+						current_piece = (int)(Math.random()*7)+1;
+
 						//doesn't move the piece and resets to the previous game area
 						return;
 					}
@@ -147,23 +166,71 @@ public class graphics extends JPanel implements Runnable {
 						//if the tile is moving down a new piece is made
 						if (dy!=0) {
 							y=0;
+							x=5;
+							r=0;
+							current_piece = (int)(Math.random()*7)+1;
 						}
 						//doesn't move the piece and resets to the previous game area
 						return;
 					}
 
 					//sets the tile to be occupied
-					swap_world[i+x+dx][j+y+dy] = t.square[0][j][i];
+					swap_world[i+x+dx][j+y+dy] = get_tetrimino(next_rotate,j,i);
 				}
 			}
 		}
 
-		//updates the player's position
+		//updates the player's position and rotation
 		x+=dx;
 		y+=dy;
+		r=next_rotate;
 
 		//updates the world
 		game.world = Arrays.copyOf(swap_world,swap_world.length);
+	}
+
+	//gets the value of a tetrimino at a certain point with rotation R
+	public int get_tetrimino(int r, int x, int y) {
+		switch (current_piece) {
+			case 1:
+				return t.o[r][x][y];
+			case 2:
+				return t.l[r][x][y];
+			case 3:
+				return t.s[r][x][y];
+			case 4:
+				return t.z[r][x][y];
+			case 5:
+				return t.L[r][x][y];
+			case 6:
+				return t.J[r][x][y];
+			case 7:
+				return t.T[r][x][y];
+			default:
+				return -1;
+		}
+	}
+	
+	//gets the length of the currently used tetris piece
+	public int get_tetrimino_length() { 
+		switch (current_piece) {
+			case 1:
+				return t.o.length;
+			case 2:
+				return t.l.length;
+			case 3:
+				return t.s.length;
+			case 4:
+				return t.z.length;
+			case 5:
+				return t.L.length;
+			case 6:
+				return t.J.length;
+			case 7:
+				return t.T.length;
+			default:
+				return -1;
+		}
 	}
 
 	//function used for drawing tiles onto the screen
