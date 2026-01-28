@@ -1,10 +1,13 @@
 import java.awt.event.*;
 
+//class that gets the user's input and acts on it
 public class input implements KeyListener {
+	//nothing yet for simple typing	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		//
 	}
+	//acts when the key is simply pressed
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//user control inputs
@@ -14,7 +17,7 @@ public class input implements KeyListener {
 				main.gr.move_shape(-1,0);
 			break;
 			case 68:
-				//move tetrimino left
+				//move tetrimino right
 				main.gr.move_shape(1,0);
 			break;
 			case 81:
@@ -31,10 +34,12 @@ public class input implements KeyListener {
 				System.exit(0);
 			break;
 		}
+		//draws a new frame for the updated game
 		main.gr.repaint();
 	}
+	//nothing yet for releases
 	@Override
 	public void keyReleased(KeyEvent e) {
-		//System.out.print("\033[H\033[2J");
+		//
 	}
 }

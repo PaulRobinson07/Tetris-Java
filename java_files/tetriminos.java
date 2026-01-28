@@ -1,3 +1,4 @@
+//class that holds the data for all the shapes and rotations of the tetrimino
 public class tetriminos {
 	int[][][] square = {
 		{
@@ -5,6 +6,18 @@ public class tetriminos {
 			{0,1,1,0},
 			{0,1,1,0},
 			{0,3,0,0}
+		}
+		{
+			{0,0,0,0},
+			{2,1,1,0},
+			{0,1,1,0},
+			{0,0,0,0}
+		}
+		{
+			{0,0,4,0},
+			{0,1,2,0},
+			{0,4,3,0},
+			{0,0,0,0}
 		}
 	};
 }

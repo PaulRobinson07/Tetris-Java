@@ -1,20 +1,33 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.Arrays;
+
+//class that runs all the graphics and loop for the game
 public class graphics extends JPanel implements Runnable {
 	//gets the game and color variables/methods
 	game_area game = new game_area();
+
+	//makes all the colors
 	colors game_colors = new colors();
+
+	//variables that hold the rotation and shape of all the tetriminos
 	tetriminos t = new tetriminos();
+	
+	//thread used to update the game every frame
 	Thread gameThread;
+
 	//variables for the player to controller the pieces
 	int x = 5;
 	int y = 0;
+
 	//sets the size of each of the tiles
 	final short TILESIZE = 32;
+
 	//draw to screen function
 	public void paintComponent (Graphics g){
+		//overwries the JPanel to start drawing things through the class
 		super.paintComponent(g);
+
 		//iterates through every tile to draw it
 		for (int i=0; i<10;i++) {
 			for (int j=0; j<20; j++) {
@@ -22,6 +35,7 @@ public class graphics extends JPanel implements Runnable {
 			}
 		}
 	}
+
 	//function that finds the tile in the game space, determines color, and draws it
 	public void pick_draw_tile(int i, int j, Graphics g) {
 		//gets the value of the game space
@@ -53,22 +67,28 @@ public class graphics extends JPanel implements Runnable {
 			break;
 		}
 	}
+
 	//inital code that starts the timer for game logic
 	public void startGameThread() {
+		//makes the array that holds all the data for the game area
 		game.makeWorld();
+
+		//starts the game loop
 		gameThread = new Thread(this);
 		gameThread.start();
 	}
+
 	//loop that runs every frame
 	@Override
 	public void run() {
+		//keeps running the thread
 		while(true) {
-			//changes the position of the current tetrimino
-			if (y<19) {
-				move_shape(0,1);
-			}
-			//redraws the screen for the next frame
+			//moves the tetrimino down one tile
+			move_shape(0,1);
+
+			//redraws the screen for the current frame
 			repaint();
+
 			//tries to wait to make another frame
 			try {
 				//waits a specified amount of time
@@ -79,53 +99,79 @@ public class graphics extends JPanel implements Runnable {
 			}
 		}
 	}
+
+	//function that allows tetriminoes to move and does the proper collision checks for them
 	public void move_shape(int dx, int dy) {
+		//temporary variable for checking movement collisions
 		int[][] swap_world = new int[10][20];
+		//copies the game world
 		for (int a = 0; a<10;a++) {
 			for (int b=0; b<20;b++) {
 				swap_world[a][b] = game.world[a][b];
 			}
-			System.out.println();
 		}
+		//loops over the tetrimino's tiles to remove the current position's data
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
+				//checks if the tile is occupied in the tetrimino's data
 				if (t.square[0][j][i]!=0) {
+					//resets the data in the correpsonding tile
 					swap_world[i+x][j+y] = 0;
 				}
 			}
 		}
+		//loops over the tetrimino's tiles to check if the piece can move
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
+				//checks if a tetrimino should be drawn
 				if (t.square[0][j][i]!=0) {
+					//temporary variables storing position of the current tile to be checked
 					int ax = i+x+dx;
 					int ay = j+y+dy;
+
+					//doesn't allow piece to leave the left or right borders
 					if (ax<0 || ax>9) {
-						System.out.println("Piece collied with border");
+						//doesn't move the piece and resets to the previous game area
 						return;
 					}
+
+					//makes a new piece if the last one reached the bottom
 					if (ay<0 || ay>19) {
-						System.out.println("Piece collied with border");
 						y=0;
+						//doesn't move the piece and resets to the previous game area
 						return;
 					}
+
+					//doesn't allow piece to move if the next spot is already occupied
 					if (swap_world[i+x+dx][j+y+dy]!=0) {
-						System.out.println("Piece collied with another piece");
-						y=0;
+						//if the tile is moving down a new piece is made
+						if (dy!=0) {
+							y=0;
+						}
+						//doesn't move the piece and resets to the previous game area
 						return;
 					}
+
+					//sets the tile to be occupied
 					swap_world[i+x+dx][j+y+dy] = t.square[0][j][i];
 				}
 			}
 		}
+
+		//updates the player's position
 		x+=dx;
 		y+=dy;
+
+		//updates the world
 		game.world = Arrays.copyOf(swap_world,swap_world.length);
 	}
+
 	//function used for drawing tiles onto the screen
 	public void tile (int x, int y, Graphics g, Color c1, Color c2) {
 		//sets the outside tile color and draws the tile
 		g.setColor(c2);
 		g.fillRect(x*TILESIZE,y*TILESIZE,TILESIZE,TILESIZE);
+
 		//sets the inside tile color and draws the tile
 		g.setColor(c1);
 		g.fillRect(x*TILESIZE+4,y*TILESIZE+4,TILESIZE-8,TILESIZE-8);

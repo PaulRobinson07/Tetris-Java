@@ -8,20 +8,21 @@ import java.awt.event.WindowEvent;
 
 //starting class that runs everything at the start and handles user input
 public class main {
+	//makes the gameplay area
 	public static graphics gr = new graphics();
+
+	//gets the class that controls user inputs
 	public static input inputs = new input();
+
     // main function where everthing starts
     public static void main(String[] args) {
         // Declaring a Frame and Label
         Frame frame = new Frame("Tetris");
 	
-		//adds the drawing function to the main file
-		//graphics gr = new graphics();
-
 		//starts the game loop that runs every frame	
 		gr.startGameThread();
 		
-		//input inputs = new input();
+		//tells the computer that the window needs all user input data while the game is focused
 		frame.addKeyListener(inputs);
 
 		//dimensions of the frame

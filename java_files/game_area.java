@@ -11,9 +11,5 @@ public class game_area {
 				world[i][j] = 0;
 			}
 		}
-		//temp loop for filling with generic testing colors
-		// for (int i=0;i<10;i++) {
-		// 	world[i][1] = i;
-		// }
 	}
 }
