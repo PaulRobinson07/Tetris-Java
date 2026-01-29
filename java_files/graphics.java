@@ -39,50 +39,13 @@ public class graphics extends JPanel implements Runnable {
 		//iterates through every tile to draw it
 		for (int i=0; i<10;i++) {
 			for (int j=0; j<20; j++) {
-				pick_draw_tile(i,j,g);
+				//pick_draw_tile(i,j,g);
+				pick_color(i,j,g,game_colors,game.world[i][j]);
 			}
 		}
 
 		//draws the hard drop location
 		draw_hard_drop(x,hard_drop(),g);
-	}
-
-	//function that finds the tile in the game space, determines color, and draws it
-	public void pick_draw_tile(int i, int j, Graphics g) {
-		//gets the value of the game space
-		switch (game.world[i][j]) {
-			//switches to draw and get the right color
-			case 1:
-				tile(i,j,g,game_colors.yellow,game_colors.light_yellow);
-			break;
-			case 2:
-				tile(i,j,g,game_colors.blue,game_colors.light_blue);
-			break;
-			case 3:
-				tile(i,j,g,game_colors.red,game_colors.light_red);
-			break;
-			case 4:
-				tile(i,j,g,game_colors.green,game_colors.light_green);
-			break;
-			case 5:
-				tile(i,j,g,game_colors.orange,game_colors.light_orange);
-			break;
-			case 6:
-				tile(i,j,g,game_colors.pink,game_colors.light_pink);
-			break;
-			case 7:
-				tile(i,j,g,game_colors.purple,game_colors.light_purple);
-			break;
-			default:
-				//draws the background
-				if (is_dark_mode) {
-					tile(i,j,g,game_colors.black,game_colors.lighter_black);
-				}
-				else {
-					tile(i,j,g,game_colors.white,game_colors.faded_white);
-				}
-			break;
-		}
 	}
 
 	//inital code that starts the timer for game logic
@@ -123,8 +86,8 @@ public class graphics extends JPanel implements Runnable {
 		int next_rotate = r+rotation;	
 
 		//clamps it between the size of the array and loops back over if it goes outside of it
-		if (next_rotate>get_tetrimino_length()-1) {next_rotate=0;}
-		if (next_rotate<0) {next_rotate=get_tetrimino_length()-1;}
+		if (next_rotate>t.get_tetrimino_rotations()-1) {next_rotate=0;}
+		if (next_rotate<0) {next_rotate=t.get_tetrimino_rotations()-1;}
 
 		//temporary variable for checking movement collisions
 		int[][] swap_world = new int[10][20];
@@ -140,7 +103,7 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if the tile is occupied in the tetrimino's data
-				if (get_tetrimino(r,j,i)!=0) {
+				if (t.get_tetrimino(r,j,i)!=0) {
 					//resets the data in the correpsonding tile
 					swap_world[i+x][j+y] = 0;
 				}
@@ -151,7 +114,7 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if a tetrimino should be drawn
-				if (get_tetrimino(next_rotate,j,i)!=0) {
+				if (t.get_tetrimino(next_rotate,j,i)!=0) {
 					//temporary variables storing position of the current tile to be checked
 					int ax = i+x+dx;
 					int ay = j+y+dy;
@@ -170,7 +133,7 @@ public class graphics extends JPanel implements Runnable {
 						r=0;
 
 						//removes full lines
-						check_lines();
+						game.check_lines();
 
 						//gets a new piece to place
 						current_piece = (int)(Math.random()*7)+1;
@@ -189,7 +152,7 @@ public class graphics extends JPanel implements Runnable {
 							r=0;
 
 							//removes full lines
-							check_lines();
+							game.check_lines();
 
 							//gets a new piece to place
 							current_piece = (int)(Math.random()*7)+1;
@@ -199,7 +162,7 @@ public class graphics extends JPanel implements Runnable {
 					}
 
 					//sets the tile to be occupied
-					swap_world[i+x+dx][j+y+dy] = get_tetrimino(next_rotate,j,i);
+					swap_world[i+x+dx][j+y+dy] = t.get_tetrimino(next_rotate,j,i);
 				}
 			}
 		}
@@ -219,37 +182,47 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//gets if the tile should be drawn
-				if (get_tetrimino(r,j,i)!=0) {
-					//gets the color of current piece
-					switch (current_piece) {
-						//switches to draw and get the right color
-						case 1:
-							tile(dx+i,dy+j,g,game_colors_t.yellow,game_colors_t.light_yellow);
-						break;
-						case 2:
-							tile(dx+i,dy+j,g,game_colors_t.blue,game_colors_t.light_blue);
-						break;
-						case 3:
-							tile(dx+i,dy+j,g,game_colors_t.red,game_colors_t.light_red);
-						break;
-						case 4:
-							tile(dx+i,dy+j,g,game_colors_t.green,game_colors_t.light_green);
-						break;
-						case 5:
-							tile(dx+i,dy+j,g,game_colors_t.orange,game_colors_t.light_orange);
-						break;
-						case 6:
-							tile(dx+i,dy+j,g,game_colors_t.pink,game_colors_t.light_pink);
-						break;
-						case 7:
-							tile(dx+i,dy+j,g,game_colors_t.purple,game_colors_t.light_purple);
-						break;
-						default:
-							tile(dx+i,dy+j,g,game_colors_t.white,game_colors_t.faded_white);
-						break;
-					}
+				if (t.get_tetrimino(r,j,i)!=0) {
+					//draws the tile hard drop
+					pick_color(dx+i,dy+j,g,game_colors_t,current_piece);
 				}
 			}
+		}
+	}
+
+	//draws the tile with the right color based on the current piece
+	public void pick_color(int location_x, int location_y, Graphics g, colors c, int swap_var) {
+		//gets the color of current piece and then draws the pieces
+		switch (swap_var) {
+			case 0:
+				if (is_dark_mode) {
+					tile(location_x,location_y,g,c.black,c.lighter_black);
+				}
+				else {
+					tile(location_y,location_y,g,c.white,c.faded_white);
+				}
+			break;
+			case 1:
+				tile(location_x,location_y,g,c.yellow,c.light_yellow);
+			break;
+			case 2:
+				tile(location_x,location_y,g,c.blue,c.light_blue);
+			break;
+			case 3:
+				tile(location_x,location_y,g,c.red,c.light_red);
+			break;
+			case 4:
+				tile(location_x,location_y,g,c.green,c.light_green);
+			break;
+			case 5:
+				tile(location_x,location_y,g,c.orange,c.light_orange);
+			break;
+			case 6:
+				tile(location_x,location_y,g,c.pink,c.light_pink);
+			break;
+			case 7:
+				tile(location_x,location_y,g,c.purple,c.light_purple);
+			break;
 		}
 	}
 
@@ -269,7 +242,7 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if the tile is occupied in the tetrimino's data
-				if (get_tetrimino(r,j,i)!=0) {
+				if (t.get_tetrimino(r,j,i)!=0) {
 					//resets the data in the correpsonding tile
 					swap_world[i+x][j+y] = 0;
 				}
@@ -282,7 +255,7 @@ public class graphics extends JPanel implements Runnable {
 			for (int i=0; i<4; i++) {
 				for (int j=0; j<4; j++) {
 					//checks if a tetrimino tile should exist
-					if (get_tetrimino(r,j,i)!=0) {
+					if (t.get_tetrimino(r,j,i)!=0) {
 						//temporary variable storing position of the current tile to be checked
 						int ay = j+a;
 						
@@ -306,83 +279,6 @@ public class graphics extends JPanel implements Runnable {
 		return 0;
 	}
 	
-	//method for checking if lines need to be cleared
-	public void check_lines() {
-		//variable used to store the number of spaces filled on a given line
-		int line_spaces_filled = 0;
-
-		//loops over every tile skipping the first line because it should never be full
-		for (int i=1; i<20;i++) {
-			for (int j=0; j<10; j++) {
-				//checks if the tile is empty
-				if (game.world[j][i]==0) {
-					//skips to the next line
-					j=10;	
-				}
-				//adds one tile to the tile count
-				else {
-					line_spaces_filled++;
-				}
-			}
-
-			//if the previous loop got a full line, all lines above the current one are moved down
-			if (line_spaces_filled==10) {
-				for (int a=i;a>1;a--) {
-					for (int j=0; j<10; j++) {
-						game.world[j][a] = game.world[j][a-1];
-					}
-				}
-			}
-
-			//the space counter is reset
-			line_spaces_filled = 0;
-		}
-	}
-
-	//gets the value of a tetrimino at a certain point with rotation R
-	public int get_tetrimino(int r, int x, int y) {
-		switch (current_piece) {
-			case 1:
-				return t.o[r][x][y];
-			case 2:
-				return t.l[r][x][y];
-			case 3:
-				return t.s[r][x][y];
-			case 4:
-				return t.z[r][x][y];
-			case 5:
-				return t.L[r][x][y];
-			case 6:
-				return t.J[r][x][y];
-			case 7:
-				return t.T[r][x][y];
-			default:
-				return -1;
-		}
-	}
-	
-	//gets the length of the currently used tetris piece
-	public int get_tetrimino_length() { 
-		switch (current_piece) {
-			case 1:
-				return t.o.length;
-			case 2:
-				return t.l.length;
-			case 3:
-				return t.s.length;
-			case 4:
-				return t.z.length;
-			case 5:
-				return t.L.length;
-			case 6:
-				return t.J.length;
-			case 7:
-				return t.T.length;
-			default:
-				return -1;
-		}
-	}
-
 	//function used for drawing tiles onto the screen
 	public void tile (int x, int y, Graphics g, Color c1, Color c2) {
 		//sets the outside tile color and draws the tile
