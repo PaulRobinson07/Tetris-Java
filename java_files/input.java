@@ -24,12 +24,23 @@ public class input implements KeyListener {
 				//rotate the tetrimino counterclockwise
 				main.gr.move_shape(0,0,-1);
 			break;
+			case 82: 
+				//toggles the dark mode
+				main.gr.is_dark_mode = !main.gr.is_dark_mode;
+			break;
+			case 83: 
+				//rotate the tetrimino down once 
+				main.gr.move_shape(0,1,0);
+			break;
 			case 69:
 				//rotate the tetrimino clockwise
 				main.gr.move_shape(0,0,1);
 			break;
 			case 32:
 				//move tetrimino to bottom 
+				main.gr.move_shape(0,main.gr.hard_drop()-main.gr.y,0);
+
+				//causes another update to force a new tetrimino to be made
 				main.gr.move_shape(0,1,0);
 			break;
 			case 8:
