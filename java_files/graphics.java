@@ -20,6 +20,9 @@ public class graphics extends JPanel implements Runnable {
 	//variables for the player to controller the pieces
 	int x = 5;
 	int y = 0;
+
+	int score = 0;
+	int level = 0;
 	
 	//sets the current piece (randomly picked from one of seven possible pieces)
 	int current_piece = (int)(Math.random()*7)+1;
@@ -28,7 +31,7 @@ public class graphics extends JPanel implements Runnable {
 	int r = 0;
 	
 	//sets the size of each of the tiles
-	final short TILESIZE = 32;
+	final short TILESIZE = 64;
 	boolean is_dark_mode = true;
 
 	//draw to screen function
@@ -46,6 +49,7 @@ public class graphics extends JPanel implements Runnable {
 
 		//draws the hard drop location
 		draw_hard_drop(x,hard_drop(),g);
+		main.s.update_score(score);
 	}
 
 	//inital code that starts the timer for game logic

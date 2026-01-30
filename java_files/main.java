@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
 public class main {
 	//makes the gameplay area
 	public static graphics gr = new graphics();
-
+	public static score_counter s = new score_counter("Score: " + gr.score);
 	//gets the class that controls user inputs
 	public static input inputs = new input();
 
@@ -26,12 +26,14 @@ public class main {
 		frame.addKeyListener(inputs);
 
 		//dimensions of the frame
-		final int WIDTH = gr.TILESIZE*10;
+		final int WIDTH = gr.TILESIZE*12;
 		final int HEIGHT = gr.TILESIZE*20;
-
+		frame.setLayout(new BoxLayout(frame, BoxLayout.X_AXIS));
 		//adds the draw function to the frame
+		gr.setPreferredSize(new Dimension(gr.TILESIZE*10, gr.TILESIZE*20));
+		s.setPreferredSize(new Dimension(gr.TILESIZE*2, gr.TILESIZE*20));
 		frame.add(gr);
-
+		frame.add(s);
 		//gets the icon image for the top left
 		ImageIcon icon = new ImageIcon("../images/tetris.png");
 

@@ -2,7 +2,7 @@
 public class game_area {
 	//defines the world
 	int[][] world = new int[10][20];
-
+	int[] score_multipliers = {40,100,300,1200};
 	//inital method that defines the empty world area
 	public void makeWorld() {
 		//iterates over the entire gamespace to fill it
@@ -17,7 +17,7 @@ public class game_area {
 	public void check_lines() {
 		//variable used to store the number of spaces filled on a given line
 		int line_spaces_filled = 0;
-
+		int lines_cleared = 0;
 		//loops over every tile skipping the first line because it should never be full
 		for (int i=1; i<20;i++) {
 			for (int j=0; j<10; j++) {
@@ -39,10 +39,14 @@ public class game_area {
 						main.gr.game.world[j][a] = main.gr.game.world[j][a-1];
 					}
 				}
+				lines_cleared++;
 			}
 
 			//the space counter is reset
 			line_spaces_filled = 0;
+		}
+		if (lines_cleared>0) {
+			main.gr.score+=score_multipliers[lines_cleared-1]*(main.gr.level+1);
 		}
 	}
 }
