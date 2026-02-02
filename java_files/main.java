@@ -27,12 +27,12 @@ public class main {
 		frame.addKeyListener(inputs);
 
 		//dimensions of the frame
-		final int WIDTH = gr.TILESIZE*12;
+		final int WIDTH = gr.TILESIZE*14;
 		final int HEIGHT = gr.TILESIZE*20;
 		frame.setLayout(new BoxLayout(frame, BoxLayout.X_AXIS));
 		//adds the draw function to the frame
 		gr.setPreferredSize(new Dimension(gr.TILESIZE*10, gr.TILESIZE*20));
-		s.setPreferredSize(new Dimension(gr.TILESIZE*2, gr.TILESIZE*20));
+		s.setPreferredSize(new Dimension(gr.TILESIZE*4, gr.TILESIZE*20));
 		frame.add(gr);
 		frame.add(s);
 		//gets the icon image for the top left

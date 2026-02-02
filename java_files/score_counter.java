@@ -2,26 +2,39 @@ import java.awt.*;
 import javax.swing.*;
 
 public class score_counter extends JPanel implements Runnable {
-	static JLabel l;
-	static JPanel J;
-	final int TILESIZE = (int)(main.gr.TILESIZE*3/4);
+	static JLabel score_text;
+	static JLabel hold_text;
+	static JPanel bag_pieces;
+	final int TILESIZE = (int)(main.gr.TILESIZE/2);
+
+	//runs on creation of class
 	score_counter(String text) {
-		l = new JLabel();
-		J = new JPanel();
-		l.setText(text);
-		this.add(l);
-		this.add(J);
+		score_text = new JLabel();
+		hold_text = new JLabel();
+		bag_pieces = new JPanel();
+		score_text.setText(text);
+		hold_text.setText("Hold:");
+		this.add(score_text);
+		this.add(hold_text);
+		this.add(bag_pieces);
 	}
+
+	//draws the jpanel to screen
 	public void paintComponent (Graphics g) {
 		super.paintComponent(g);
 		for (int i=0; i<7;i++) {
 			draw_shape(i,g);
 		}
+		draw_hold(g);
 	}
+
+	//starts a thread to update the next piece every frame
 	public void startThread() {
 		Thread t = new Thread(this);
 		t.start();
 	}
+
+	//the thread that runs every frame
 	@Override
 	public void run() {
 		while(true) {
@@ -33,19 +46,32 @@ public class score_counter extends JPanel implements Runnable {
 			}
 		}
 	}
+
+	//draws a shape at a given point
 	public void draw_shape(int y, Graphics g) { 
 		for (int i=0;i<4;i++) {
 			for (int j=0;j<4;j++) {
 				int a = main.gr.t.get_tetrimino(0,j,i,main.gr.bag_0.p.get(y));
 				if (a!=0) {
 					//tile(i,j+y*5,g,main.gr.game_colors.light_red,main.gr.game_colors.red);
-					pick_color(i,j+y*5,g,main.gr.game_colors,a);
+					pick_color(i,j+y*5+3,g,main.gr.game_colors,a);
+				}
+			}
+		}
+	}
+	public void draw_hold(Graphics g) {
+		for (int i=0;i<4;i++) {
+			for (int j=0;j<4;j++) {
+				int a = main.gr.t.get_tetrimino(0,j,i,main.gr.hold);
+				if (a!=0) {
+					//tile(i,j+y*5,g,main.gr.game_colors.light_red,main.gr.game_colors.red);
+					pick_color(i+4,j+3,g,main.gr.game_colors,a);
 				}
 			}
 		}
 	}
 	public void update_score(int score) {
-		l.setText("Score: " + score);
+		score_text.setText("Score: " + score);
 	}
 	//function used for drawing tiles onto the screen
 	public void tile (int x, int y, Graphics g, Color c1, Color c2) {

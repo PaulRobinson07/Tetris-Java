@@ -43,6 +43,39 @@ public class input implements KeyListener {
 				//causes another update to force a new tetrimino to be made
 				main.gr.move_shape(0,1,0);
 			break;
+			case 16:
+				if (main.gr.hold_can_swap) {
+					//loops over the tetrimino's tiles to remove the current position's data
+					for (int i=0; i<4; i++) {
+						for (int j=0; j<4; j++) {
+							//checks if the tile is occupied in the tetrimino's data
+							if (main.gr.t.get_tetrimino(main.gr.r,j,i,main.gr.current_piece)!=0) {
+								//resets the data in the correpsonding tile
+								main.gr.game.world[i+main.gr.x][j+main.gr.y] = 0;
+							}
+						}
+					}
+					if (main.gr.hold ==0) {
+						main.gr.hold = main.gr.bag_0.p.get(0); 
+						//gets a new piece to place
+						main.gr.bag_0.new_piece();
+					}
+					else  {
+						main.gr.current_piece = main.gr.hold;
+						main.gr.hold = main.gr.bag_0.p.get(0);
+						main.gr.bag_0.p.set(0,main.gr.current_piece);
+					}
+
+					main.gr.hold_can_swap = false;
+
+					//resets positioning variables
+					main.gr.y=0;
+					main.gr.x=5;
+					main.gr.r=0;
+
+					main.gr.current_piece = main.gr.bag_0.p.get(0);
+				}
+			break;
 			case 8:
 				//ends the program
 				System.exit(0);

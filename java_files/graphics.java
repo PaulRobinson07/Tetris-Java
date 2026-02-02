@@ -34,6 +34,9 @@ public class graphics extends JPanel implements Runnable {
 	final short TILESIZE = 30;
 	boolean is_dark_mode = true;
 
+	boolean hold_can_swap = true;
+	int hold = 0;
+
 	//draw to screen function
 	public void paintComponent (Graphics g){
 		//overwries the JPanel to start drawing things through the class
@@ -142,6 +145,7 @@ public class graphics extends JPanel implements Runnable {
 						//gets a new piece to place
 						bag_0.new_piece();
 						current_piece = bag_0.p.get(0);
+						hold_can_swap = true;
 
 						//doesn't move the piece and resets to the previous game area
 						return;
@@ -162,6 +166,8 @@ public class graphics extends JPanel implements Runnable {
 							//gets a new piece to place
 							bag_0.new_piece();
 							current_piece = bag_0.p.get(0);
+
+							hold_can_swap = true;
 						}
 						//doesn't move the piece and resets to the previous game area
 						return;
