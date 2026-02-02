@@ -21,6 +21,7 @@ public class main {
 	
 		//starts the game loop that runs every frame	
 		gr.startGameThread();
+		s.startThread();
 		
 		//tells the computer that the window needs all user input data while the game is focused
 		frame.addKeyListener(inputs);

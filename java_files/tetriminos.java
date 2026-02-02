@@ -142,8 +142,8 @@ public class tetriminos {
 	};
 
 	//gets the value of a tetrimino at a certain point with rotation R
-	public int get_tetrimino(int r, int x, int y) {
-		switch (main.gr.current_piece) {
+	public int get_tetrimino(int r, int x, int y, int p) {
+		switch (p) {
 			case 1:
 				return o[r][x][y];
 			case 2:

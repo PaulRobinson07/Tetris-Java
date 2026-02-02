@@ -73,7 +73,6 @@ public class graphics extends JPanel implements Runnable {
 
 			//redraws the screen for the current frame
 			repaint();
-
 			//tries to wait to make another frame
 			try {
 				//waits a specified amount of time
@@ -108,7 +107,7 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if the tile is occupied in the tetrimino's data
-				if (t.get_tetrimino(r,j,i)!=0) {
+				if (t.get_tetrimino(r,j,i,current_piece)!=0) {
 					//resets the data in the correpsonding tile
 					swap_world[i+x][j+y] = 0;
 				}
@@ -119,7 +118,7 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if a tetrimino should be drawn
-				if (t.get_tetrimino(next_rotate,j,i)!=0) {
+				if (t.get_tetrimino(next_rotate,j,i,current_piece)!=0) {
 					//temporary variables storing position of the current tile to be checked
 					int ax = i+x+dx;
 					int ay = j+y+dy;
@@ -169,7 +168,7 @@ public class graphics extends JPanel implements Runnable {
 					}
 
 					//sets the tile to be occupied
-					swap_world[i+x+dx][j+y+dy] = t.get_tetrimino(next_rotate,j,i);
+					swap_world[i+x+dx][j+y+dy] = t.get_tetrimino(next_rotate,j,i,current_piece);
 				}
 			}
 		}
@@ -189,7 +188,7 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//gets if the tile should be drawn
-				if (t.get_tetrimino(r,j,i)!=0) {
+				if (t.get_tetrimino(r,j,i,current_piece)!=0) {
 					//draws the tile hard drop
 					pick_color(dx+i,dy+j,g,game_colors_t,current_piece);
 				}
@@ -249,7 +248,7 @@ public class graphics extends JPanel implements Runnable {
 		for (int i=0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				//checks if the tile is occupied in the tetrimino's data
-				if (t.get_tetrimino(r,j,i)!=0) {
+				if (t.get_tetrimino(r,j,i,current_piece)!=0) {
 					//resets the data in the correpsonding tile
 					swap_world[i+x][j+y] = 0;
 				}
@@ -262,7 +261,7 @@ public class graphics extends JPanel implements Runnable {
 			for (int i=0; i<4; i++) {
 				for (int j=0; j<4; j++) {
 					//checks if a tetrimino tile should exist
-					if (t.get_tetrimino(r,j,i)!=0) {
+					if (t.get_tetrimino(r,j,i,current_piece)!=0) {
 						//temporary variable storing position of the current tile to be checked
 						int ay = j+a;
 						
