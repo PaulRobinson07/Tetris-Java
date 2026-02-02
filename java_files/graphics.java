@@ -16,7 +16,7 @@ public class graphics extends JPanel implements Runnable {
 	
 	//thread used to update the game every frame
 	Thread gameThread;
-
+	Bag bag_0 = new Bag();
 	//variables for the player to controller the pieces
 	int x = 5;
 	int y = 0;
@@ -25,13 +25,13 @@ public class graphics extends JPanel implements Runnable {
 	int level = 0;
 	
 	//sets the current piece (randomly picked from one of seven possible pieces)
-	int current_piece = (int)(Math.random()*7)+1;
+	int current_piece;
 	
 	//rotation angle (times 90 deg)
 	int r = 0;
 	
 	//sets the size of each of the tiles
-	final short TILESIZE = 64;
+	final short TILESIZE = 30;
 	boolean is_dark_mode = true;
 
 	//draw to screen function
@@ -56,6 +56,7 @@ public class graphics extends JPanel implements Runnable {
 	public void startGameThread() {
 		//makes the array that holds all the data for the game area
 		game.makeWorld();
+		current_piece = bag_0.p.get(0);
 
 		//starts the game loop
 		gameThread = new Thread(this);
@@ -140,7 +141,8 @@ public class graphics extends JPanel implements Runnable {
 						game.check_lines();
 
 						//gets a new piece to place
-						current_piece = (int)(Math.random()*7)+1;
+						bag_0.new_piece();
+						current_piece = bag_0.p.get(0);
 
 						//doesn't move the piece and resets to the previous game area
 						return;
@@ -159,7 +161,8 @@ public class graphics extends JPanel implements Runnable {
 							game.check_lines();
 
 							//gets a new piece to place
-							current_piece = (int)(Math.random()*7)+1;
+							bag_0.new_piece();
+							current_piece = bag_0.p.get(0);
 						}
 						//doesn't move the piece and resets to the previous game area
 						return;
